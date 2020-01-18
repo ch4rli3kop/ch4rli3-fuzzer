@@ -1,3 +1,3 @@
 all:
-	clang main.c -c
-	clang main.o -o main
+	clang++ main.cc -c
+	clang++ main.o -o main
