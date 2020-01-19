@@ -1,3 +1,8 @@
+/*
+this is the basic openjpeg fuzzer
+by ch4rli3kop. 2020.01.19 
+*/
+
 #include <iostream>
 #include <fstream>
 #include <cstdio>
@@ -91,6 +96,21 @@ void Add_to_report(int state){
 	Add_state(state);
 }
 
+void Add_to_corpus(){
+	ifstream in("out/cur_input.j2k", ios::ate);
+	if (in.fail()){
+        perror("open cur_input error!\n");
+        exit(-1);
+    }
+	uint32_t length = in.tellg();
+	in.seekg(0, ios::beg);
+
+	uint8_t* buf = new uint8_t[length+1+4];
+    memcpy(buf, &length, 4);
+	in.read((char*)buf+4, length);
+	corpus.push_back(buf);
+}
+
 void run_target(char* target, char* argvs[]){
 
 	pid_t pid = fork();
@@ -117,7 +137,7 @@ void run_target(char* target, char* argvs[]){
 		// Check if the testcase hits new code path.
 		if (is_newPath()){
 			// If it hits new code path, Add to corpus.
-			
+			Add_to_corpus();	
 		}
 
 		//printf("status : %d\n", state);
@@ -127,11 +147,10 @@ void run_target(char* target, char* argvs[]){
 	
 }
 
-void memory_init(){
-	int fd;
-	pmmap = mmap((void*)0, 0x10000, PROT_READ|PROT_WRITE, MAP_PRIVATE, fd, 0);	
-}
-
+// void memory_init(){
+// 	int fd;
+// 	pmmap = mmap((void*)0, 0x10000, PROT_READ|PROT_WRITE, MAP_PRIVATE, fd, 0);	
+// }
 
 // get coveraged information from shared memory buffer
 void shared_memory_init(){
@@ -195,17 +214,28 @@ void mutation(uint8_t* _data){
 	
 	memcpy((char*)&length, _data, 4);
 
-	// check buffer overflow
-	// for (int i = 1; i < 0x10; i++){
-	// 	int _len = length * i;
-	// 	char* buf = new char[4 + _len];
-
-	// 	memcpy(buf, (char*)&_len, 4);
-	// 	for (int j = 0; j < i; j++){
-	// 		memcpy(buf + 4 + length * j, data, length);
-	// 	}
-	// }
-	input.push(_data);
+    uint8_t* new_data;
+	
+    switch(random){
+        case 1: 
+ 			// check buffer overflow
+			// for (int i = 1; i < 0x10; i++){
+			// 	int _len = length * i;
+			// 	char* buf = new char[4 + _len];
+			// 	memcpy(buf, (char*)&_len, 4);
+			// 	for (int j = 0; j < i; j++){
+			// 		memcpy(buf + 4 + length * j, data, length);
+			// 	}
+			// }
+        case 2:
+            // check Known Value (-1, 0, 1, INT_MAX, ...)
+        case 3:
+            // bit flip
+        case 4:
+            ...
+    }
+	
+	input.push(new_data);
 
 }
 
