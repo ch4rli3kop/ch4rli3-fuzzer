@@ -16,6 +16,7 @@ by ch4rli3kop. 2020.01.19
 #include <sys/wait.h>
 #include <queue>
 #include <vector>
+#include <list>
 #include <dirent.h>
 #include <string.h>
 #include <hash_map>
@@ -109,7 +110,7 @@ void Add_to_corpus(){
 	uint8_t* buf = new uint8_t[length+1+4];
     memcpy(buf, &length, 4);
 	in.read((char*)buf+4, length);
-	corpus.push_back(buf);
+	corpus.insert(corpus.begin(), buf);
 }
 
 void run_target(char* target, char* argvs[]){
