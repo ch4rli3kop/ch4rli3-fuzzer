@@ -26,6 +26,7 @@ using namespace std;
 
 #define TARGET  "/home/bob/openjpeg/build/bin/opj_decompress"
 //#define TARGET  "test/test"
+char sp[] = "/-\|";
 
 void* shmAddr; 
 void* pmmap; 
@@ -216,26 +217,27 @@ void mutation(uint8_t* _data){
 
     uint8_t* new_data;
 	
-    switch(random){
-        case 1: 
- 			// check buffer overflow
-			// for (int i = 1; i < 0x10; i++){
-			// 	int _len = length * i;
-			// 	char* buf = new char[4 + _len];
-			// 	memcpy(buf, (char*)&_len, 4);
-			// 	for (int j = 0; j < i; j++){
-			// 		memcpy(buf + 4 + length * j, data, length);
-			// 	}
-			// }
-        case 2:
-            // check Known Value (-1, 0, 1, INT_MAX, ...)
-        case 3:
-            // bit flip
-        case 4:
-            ...
-    }
+    // switch(random){
+    //     case 1: 
+ 	// 		// check buffer overflow
+	// 		// for (int i = 1; i < 0x10; i++){
+	// 		// 	int _len = length * i;
+	// 		// 	char* buf = new char[4 + _len];
+	// 		// 	memcpy(buf, (char*)&_len, 4);
+	// 		// 	for (int j = 0; j < i; j++){
+	// 		// 		memcpy(buf + 4 + length * j, data, length);
+	// 		// 	}
+	// 		// }
+    //     case 2:
+    //         // check Known Value (-1, 0, 1, INT_MAX, ...)
+    //     case 3:
+    //         // bit flip
+    //     case 4:
+    //         //...
+    // }
+	// input.push(new_data);
 	
-	input.push(new_data);
+	input.push(_data);
 
 }
 
