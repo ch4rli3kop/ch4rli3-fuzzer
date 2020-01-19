@@ -6,7 +6,6 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 
-//uint8_t blockMap[0x1000] = {0, };
 
 void* shmAddr = NULL; 
 int* cnt = NULL;
@@ -29,15 +28,16 @@ void memory_init(){
 }
 
 
-void __sanitizer_cov_trace_pc_guard_init(uint32_t *start,
-                                                    uint32_t *stop) {
+void __sanitizer_cov_trace_pc_guard_init(uint32_t *start, uint32_t *stop) {
   static uint64_t N;  // Counter for the guards.
   if (start == stop || *start) return;  // Initialize only once.
-  printf("INIT: %p %p\n", start, stop);
+  
   memory_init();
+  
   for (uint32_t *x = start; x < stop; x++)
     *x = N++;  // Guards should start from 0.
 
+  printf("INIT: %p %p\n", start, stop);
   printf("Shared Memory : %p\n", shmAddr);
 }
 
